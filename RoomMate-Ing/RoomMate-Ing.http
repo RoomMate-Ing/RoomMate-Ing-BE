@@ -1,0 +1,6 @@
+@RoomMate_Ing_HostAddress = http://localhost:5246
+
+GET {{RoomMate_Ing_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
