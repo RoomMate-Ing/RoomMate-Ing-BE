@@ -2,8 +2,10 @@
 using BLL_Service.Interface;
 using DAL.Entities;
 using DAL.IRepositories;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,8 +16,10 @@ namespace BLL_Service.Service
     public class RoomateService : IRoomateService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private const string phone_pattern = "^(\\+\\d{1,3})?\\s?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$\r\n";
-        private Regex phone_regex = new(phone_pattern, RegexOptions.IgnoreCase);
+        private const string phone_pattern = @"^(\+\d{1,3})?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$";
+        private Regex phone_regex = new Regex(phone_pattern, RegexOptions.IgnoreCase);
+        private const string email_pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        private Regex email_regex = new Regex(email_pattern, RegexOptions.IgnoreCase);
 
         public RoomateService( IUnitOfWork unitOfWork) 
         {
@@ -44,30 +48,84 @@ namespace BLL_Service.Service
             }
             
         }
+       
 
-        public Task<RoomateDTO> Find(Guid id)
+        public async Task<ResponseDTO<RoomateDTO>> FindAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                var roomateToSend = await _unitOfWork.RoomateRepository.FindAsync(id);
+                RoomateDTO roomateToSendDTO = roomateToSend;
+                if(roomateToSend is null) return new ResponseDTO<RoomateDTO>() { Success = false, StatusCode = 404, ErrorMessage = "Error: Roomate not Found"};
+                return new ResponseDTO<RoomateDTO>() {  StatusCode = 200, Success = true, Data=roomateToSendDTO };
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<RoomateDTO> Find(string email)
+        public async Task<ResponseDTO<RoomateDTO>> FindAsync(string email)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var roomateToSend = await _unitOfWork.RoomateRepository.FindAsync(email);
+                if (roomateToSend is null) return new ResponseDTO<RoomateDTO>() { Success = false, StatusCode = 404, ErrorMessage = "Error: Roomate not Found" };
+                RoomateDTO roomateToSendDTO = roomateToSend;
+                return new ResponseDTO<RoomateDTO>() { StatusCode = 200, Success = true, Data = roomateToSendDTO };
+            }
+            catch 
+            {
+                throw;
+            }
         }
 
-        public Task<IEnumerable<RoomateDTO>> GetAll()
+        public async Task<ResponseDTO<IEnumerable<RoomateDTO>>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var roomateList = await _unitOfWork.RoomateRepository.FindAllAsync();
+                if (roomateList.Count == 0) return new ResponseDTO<IEnumerable<RoomateDTO>>() { Success = false, StatusCode = 404, ErrorMessage = "Error: No Roomates Found" };
+
+                //Extended Method
+                var roomateDTOList = roomateList.RoomateListConvertion();
+
+                return new ResponseDTO<IEnumerable<RoomateDTO>>() { Success = true, StatusCode = 200, Data = roomateDTOList };
+
+            }
+            catch
+            {
+                throw;
+            }
+            
         }
 
-        public Task<bool> RemoveAsync(Guid id)
+        public async Task<ResponseDTO<bool>> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                var roomateTodelete = await _unitOfWork.RoomateRepository.FindAsync(id);
+                _unitOfWork.RoomateRepository.
+            }
+            catch 
+            {
+
+            }
         }
 
-        public Task<bool> UpdateAsync(RoomateDTO roomateDTO)
+        public async Task<ResponseDTO<bool>> UpdateAsync(RoomateDTO roomateDTO)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                Roomate roomate = roomateDTO.RoomateConvertion();
+                if (await _unitOfWork.RoomateRepository.UpdateAsync(roomate)) return new ResponseDTO<bool>() { Success = true, StatusCode = 200 };
+                else return new ResponseDTO<bool> { Success = false, StatusCode = 400, ErrorMessage = "Error: During saving the updates for this roomate" };
+                
+            }
+            catch 
+            {
+                throw;
+            }
         }
     }
 }

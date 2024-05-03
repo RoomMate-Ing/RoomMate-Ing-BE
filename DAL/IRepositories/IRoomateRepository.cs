@@ -9,6 +9,6 @@ namespace DAL.IRepositories
 {
     public interface IRoomateRepository : IGenericRepository<Roomate>
     {
-
+        Task<Roomate> FindAsync(string email);
     }
 }

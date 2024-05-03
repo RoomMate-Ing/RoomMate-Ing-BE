@@ -10,11 +10,11 @@ namespace BLL_Service.Interface
     public interface IRoomateService
     {
         Task<ResponseDTO<Guid>> AddAsync(RoomateDTO roomateDTO);
-        Task<bool> RemoveAsync(Guid id);
-        Task<bool> UpdateAsync(RoomateDTO roomateDTO);
-        Task<RoomateDTO> Find(Guid id);
-        Task<RoomateDTO> Find(string email);
-        Task<IEnumerable<RoomateDTO>> GetAll();
+        Task<ResponseDTO<bool>> RemoveAsync(Guid id);
+        Task<ResponseDTO<bool>> UpdateAsync(RoomateDTO roomateDTO);
+        Task<ResponseDTO<RoomateDTO>> FindAsync(Guid id);
+        Task<ResponseDTO<RoomateDTO>> FindAsync(string email);
+        Task<ResponseDTO<IEnumerable<RoomateDTO>>> GetAll();
 
     }
 }

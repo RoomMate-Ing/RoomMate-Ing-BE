@@ -15,14 +15,14 @@ namespace DAL.Repositories
         private readonly RoomMateDBContext _context;
         private protected DbSet<T> _dbSet;
         public GenericRepository(RoomMateDBContext context)
-        { 
+        {
             _context = context;
             _dbSet = context.Set<T>();
         }
 
         public async Task<Guid> AddAsync(T entity)
         {
-            try 
+            try
             {
                 _context.Attach(entity).State = EntityState.Added;
 
@@ -31,21 +31,21 @@ namespace DAL.Repositories
                     await _context.SaveChangesAsync();
                     return GetEntityId(entity);
                 }
-                else 
-                { 
+                else
+                {
                     throw new InvalidOperationException("Impossible to retrive the ID from th entity");
                 }
             }
-            catch 
+            catch
             {
                 throw;
             }
-           
+
         }
 
         private Guid GetEntityId(T entity)
         {
-            
+
             var property = entity.GetType().GetProperty("ID");
             if (property != null)
             {
@@ -59,20 +59,59 @@ namespace DAL.Repositories
 
 
 
-        public async Task<IEnumerable<T>> FindAllAsync()
+        public async Task<List<T>> FindAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            try
+            {
+                return await _dbSet.ToListAsync();
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
         public async Task<T?> FindAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id);
+            try
+            {
+                return await _dbSet.FindAsync(id);
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
         public async Task<bool> UpdateAsync(T entity)
         {
-            var result = _dbSet.Update(entity);
-            return (result.State == EntityState.Modified) ? true : false;
+            try
+            {
+                var result = _dbSet.Update(entity);
+                return (result.State == EntityState.Modified) ? true : false;
+            }
+            catch
+            {
+                throw;
+            }
+           
+        } 
+
+        public async Task<bool> Remove(T entity)
+        {
+            try 
+            {
+                _context.Entry(entity).State = EntityState.Deleted;
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+
+            } catch 
+            { 
+                throw;
+            }
+            
         }
     }
 }

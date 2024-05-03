@@ -9,7 +9,7 @@ namespace DAL.IRepositories
     public interface IGenericRepository<T> where T : class
     {
         Task<T?> FindAsync(Guid id);
-        Task<IEnumerable<T>> FindAllAsync();
+        Task<List<T>> FindAllAsync();
         Task<Guid> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
     }

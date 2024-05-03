@@ -14,6 +14,8 @@ namespace DAL.Repositories
     {
         private readonly RoomMateDBContext _context;
 
+        public IRoomateRepository RoomateRepository { get; private set; }
+
         public UnitOfWork(RoomMateDBContext context)
         {
             _context = context;
@@ -21,7 +23,6 @@ namespace DAL.Repositories
             
         }
 
-        public IRoomateRepository RoomateRepository { get; private set; }
         
 
         public async Task<int> Save()
