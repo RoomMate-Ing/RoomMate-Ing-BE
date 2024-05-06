@@ -12,5 +12,6 @@ namespace DAL.IRepositories
         Task<List<T>> FindAllAsync();
         Task<Guid> AddAsync(T entity);
         Task<bool> UpdateAsync(T entity);
+        Task<bool> DeleteAsync(T entity);
     }
 }

@@ -16,6 +16,7 @@ namespace DAL.DBContext
         }
         internal DbSet<Roomate> RoomMate { get; set; }
         internal DbSet<HouseWork> HouseWork { get; set; }
+        internal DbSet<WorkShift> WorkShift { get; set; }
 
 
     }

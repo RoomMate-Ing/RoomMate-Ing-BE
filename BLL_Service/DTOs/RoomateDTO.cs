@@ -18,7 +18,7 @@ namespace BLL_Service.DTOs
         public static implicit operator RoomateDTO(Roomate roomate)
         {
             RoomateDTO roomateDto = new RoomateDTO();
-            roomateDto.ID = roomate.ID;
+            roomateDto.ID = roomate.Id;
             roomateDto.Name = roomate.Name;
             roomateDto.Phone = roomate.Phone;
             roomateDto.Email = roomate.Email;

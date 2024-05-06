@@ -15,11 +15,15 @@ namespace DAL.Repositories
         private readonly RoomMateDBContext _context;
 
         public IRoomateRepository RoomateRepository { get; private set; }
+        public IHouseWorkRepository HouseWorkRepository { get; private set; }
+        public IWorkShiftRepository WorkShiftRepository { get; private set; }
 
         public UnitOfWork(RoomMateDBContext context)
         {
             _context = context;
             RoomateRepository = new RoomateRepository(_context);
+            HouseWorkRepository = new HouseWorkRepository(_context);
+            WorkShiftRepository = new WorkShiftRepository(_context);
             
         }
 

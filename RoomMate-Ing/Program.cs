@@ -40,6 +40,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IRoomateService, RoomateService>();
+builder.Services.AddScoped<IHouseWorkService, HouseWorkService>();
+builder.Services.AddScoped<IWorkShiftService, WorkShiftService>();
 
 var app = builder.Build();
 

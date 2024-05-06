@@ -46,7 +46,7 @@ namespace DAL.Repositories
         private Guid GetEntityId(T entity)
         {
 
-            var property = entity.GetType().GetProperty("ID");
+            var property = entity.GetType().GetProperty("Id");
             if (property != null)
             {
                 return (Guid)property.GetValue(entity);
@@ -90,7 +90,8 @@ namespace DAL.Repositories
             try
             {
                 var result = _dbSet.Update(entity);
-                return (result.State == EntityState.Modified) ? true : false;
+                
+                return await _context.SaveChangesAsync() > 0 ? true : false;
             }
             catch
             {
@@ -99,7 +100,7 @@ namespace DAL.Repositories
            
         } 
 
-        public async Task<bool> Remove(T entity)
+        public async Task<bool> DeleteAsync(T entity)
         {
             try 
             {

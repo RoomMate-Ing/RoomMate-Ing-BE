@@ -3,6 +3,7 @@ using System;
 using DAL.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(RoomMateDBContext))]
-    partial class RoomMateDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240506104049_AddDescriptionSectionHouseWork")]
+    partial class AddDescriptionSectionHouseWork
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
@@ -52,49 +55,6 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomMate");
-                });
-
-            modelBuilder.Entity("DAL.Entities.WorkShift", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("HouseWorkId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("RoomateId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateOnly>("TimeStamp")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HouseWorkId");
-
-                    b.HasIndex("RoomateId");
-
-                    b.ToTable("WorkShift");
-                });
-
-            modelBuilder.Entity("DAL.Entities.WorkShift", b =>
-                {
-                    b.HasOne("DAL.Entities.HouseWork", "HouseWork")
-                        .WithMany()
-                        .HasForeignKey("HouseWorkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAL.Entities.Roomate", "Roomate")
-                        .WithMany()
-                        .HasForeignKey("RoomateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HouseWork");
-
-                    b.Navigation("Roomate");
                 });
 #pragma warning restore 612, 618
         }

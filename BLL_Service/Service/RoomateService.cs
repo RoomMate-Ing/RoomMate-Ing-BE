@@ -1,10 +1,12 @@
 ﻿using BLL_Service.DTOs;
+using BLL_Service.ExtensionMethods;
 using BLL_Service.Interface;
 using DAL.Entities;
 using DAL.IRepositories;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -33,7 +35,7 @@ namespace BLL_Service.Service
             try 
             {
                
-                Roomate roomate = new Roomate() { ID = roomateDTO.ID, Name = roomateDTO.Name, Phone = roomateDTO.Phone };
+                Roomate roomate = new Roomate() { Id = roomateDTO.ID, Name = roomateDTO.Name, Phone = roomateDTO.Phone };
                 if (phone_regex.IsMatch(roomateDTO.Phone)) return new ResponseDTO<Guid> { StatusCode = 400, Success = false, ErrorMessage = "Phone attribute is in a wrong format"};      
                         
               
@@ -105,11 +107,14 @@ namespace BLL_Service.Service
             try 
             {
                 var roomateTodelete = await _unitOfWork.RoomateRepository.FindAsync(id);
-                _unitOfWork.RoomateRepository.
+                var res = await _unitOfWork.RoomateRepository.DeleteAsync(roomateTodelete);
+                if(res) return new ResponseDTO<bool> { Success = true, Data = res, StatusCode = 200 };
+                return new ResponseDTO<bool> {  StatusCode = 400, Success = false, ErrorMessage = "Error: Error while deleting roommate" };
+            
             }
             catch 
             {
-
+                throw;
             }
         }
 

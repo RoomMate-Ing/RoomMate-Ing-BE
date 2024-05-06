@@ -11,6 +11,9 @@ namespace DAL.IRepositories
     {
 
         IRoomateRepository RoomateRepository { get; }
+        IHouseWorkRepository HouseWorkRepository { get; }
+        IWorkShiftRepository WorkShiftRepository { get; }
+
 
         Task<int> Save();
         
