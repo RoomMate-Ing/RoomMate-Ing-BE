@@ -10,7 +10,7 @@ namespace BLL_Service.ExtensionMethods
 {
     public static class ListExstensions
     {
-        public static List<RoomateDTO> RoomateListConvertion(this List<Roomate> roomates)
+        public static List<RoomateDTO> ToRoomate(this List<Roomate> roomates)
         {
             List<RoomateDTO> roomatesDto = [];
 
@@ -21,7 +21,7 @@ namespace BLL_Service.ExtensionMethods
 
             return roomatesDto;
         }
-        public static List<HouseWorkDTO> HouseWorkListConvertion(this List<HouseWork> houseworks)
+        public static List<HouseWorkDTO> ToHouseWork(this List<HouseWork> houseworks)
         {
             List<HouseWorkDTO> houseworksDto = [];
 
@@ -31,6 +31,16 @@ namespace BLL_Service.ExtensionMethods
             }
 
             return houseworksDto;
+        }
+        public static List<WorkShiftDTO> ToWorkshift(this List<WorkShift> workShifts)
+        {
+
+            List<WorkShiftDTO> workShiftDTOList = [];
+            foreach (var workshift in workShifts)
+            {
+                workShiftDTOList.Add(workshift);
+            }
+            return workShiftDTOList;
         }
     }
 }

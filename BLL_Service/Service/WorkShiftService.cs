@@ -34,24 +34,66 @@ namespace BLL_Service.Service
             }
         }
 
-        public Task<ResponseDTO<WorkShiftDTO>> FindAsync(Guid id)
+        public async Task<ResponseDTO<WorkShiftDTO>> FindAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                var workshift = await _unitOfWork.WorkShiftRepository.FindAsync(id);
+                if (workshift is null) return new ResponseDTO<WorkShiftDTO>() { Success = false, StatusCode = 400, ErrorMessage = "Error: Error finding The Workshift" };
+                WorkShiftDTO workShiftDTO = workshift;
+                return new ResponseDTO<WorkShiftDTO>() { Success = true, StatusCode = 200, Data = workShiftDTO };
+
+            } 
+            catch 
+            {
+                throw;
+            }
         }
 
-        public Task<ResponseDTO<IEnumerable<WorkShiftDTO>>> GetAll()
+        public async Task<ResponseDTO<IEnumerable<WorkShiftDTO>>> GetAll()
         {
-            throw new NotImplementedException();
+            try 
+            {
+                var workshiftList = await _unitOfWork.WorkShiftRepository.FindAllAsync();
+                if (workshiftList.Count == 0) return new ResponseDTO<IEnumerable<WorkShiftDTO>>() { Success = false, StatusCode = 404, ErrorMessage = "Error: Error no Workshift Found" };
+                List<WorkShiftDTO> workShiftDTOList = workshiftList.ToWorkshift();
+                return new ResponseDTO<IEnumerable<WorkShiftDTO>>() { Success = true, StatusCode = 200, Data = workShiftDTOList };
+            }
+            catch 
+            {
+                throw;
+            }
         }
 
-        public Task<ResponseDTO<bool>> RemoveAsync(Guid id)
+        public async Task<ResponseDTO<bool>> RemoveAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                var workshift = await _unitOfWork.WorkShiftRepository.FindAsync(id);
+                var res = await _unitOfWork.WorkShiftRepository.DeleteAsync(workshift);
+                if (res) return new ResponseDTO<bool>() { Success = true, StatusCode = 200, Data = res };
+                return new ResponseDTO<bool>() { Success = false, StatusCode = 400, ErrorMessage = "Error: Error Deleting Worshift" };
+            } 
+            catch 
+            {
+                throw;
+            }
+            
         }
 
-        public Task<ResponseDTO<bool>> UpdateAsync(WorkShiftDTO workshiftDTO)
+        public async Task<ResponseDTO<bool>> UpdateAsync(WorkShiftDTO workshiftDTO)
         {
-            throw new NotImplementedException();
+            try 
+            {
+                WorkShift workShift = workshiftDTO.WorkShiftConvertion();
+                var res = await _unitOfWork.WorkShiftRepository.UpdateAsync(workShift);
+                if(res) return new ResponseDTO<bool>() { Success = true, StatusCode = 200, Data=res };
+                return new ResponseDTO<bool>() { Success = false, StatusCode = 400, ErrorMessage = "Error: Error Updating the Workshift" };
+            }
+            catch 
+            {
+                throw;
+            }
         }
     }
 }

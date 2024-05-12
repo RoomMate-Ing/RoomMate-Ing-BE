@@ -36,7 +36,7 @@ namespace BLL_Service.Service
             {
                
                 Roomate roomate = new Roomate() { Id = roomateDTO.ID, Name = roomateDTO.Name, Phone = roomateDTO.Phone };
-                if (phone_regex.IsMatch(roomateDTO.Phone)) return new ResponseDTO<Guid> { StatusCode = 400, Success = false, ErrorMessage = "Phone attribute is in a wrong format"};      
+                if (!phone_regex.IsMatch(roomateDTO.Phone)) return new ResponseDTO<Guid> { StatusCode = 400, Success = false, ErrorMessage = "Phone attribute is in a wrong format"};      
                         
               
                 var result = await _unitOfWork.RoomateRepository.AddAsync(roomate);
@@ -90,7 +90,7 @@ namespace BLL_Service.Service
                 if (roomateList.Count == 0) return new ResponseDTO<IEnumerable<RoomateDTO>>() { Success = false, StatusCode = 404, ErrorMessage = "Error: No Roomates Found" };
 
                 //Extended Method
-                var roomateDTOList = roomateList.RoomateListConvertion();
+                var roomateDTOList = roomateList.ToRoomate();
 
                 return new ResponseDTO<IEnumerable<RoomateDTO>>() { Success = true, StatusCode = 200, Data = roomateDTOList };
 

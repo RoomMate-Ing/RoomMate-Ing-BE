@@ -15,9 +15,9 @@ namespace BLL_Service.ExtensionMethods
             WorkShift workShift = new WorkShift();
             workShift.Id = workShiftDTO.Id;
             workShift.TimeStamp = workShiftDTO.TimeStamp;
-            workShift.RoomateId = workShiftDTO.RoomateId;
-            workShift.HouseWorkId = workShift.HouseWorkId;
-           
+            workShift.HouseId = new Guid(workShiftDTO.RoomateId);
+            workShift.HouseWorkId = new Guid(workShiftDTO.HouseWorkId);
+
 
             return workShift;
         }

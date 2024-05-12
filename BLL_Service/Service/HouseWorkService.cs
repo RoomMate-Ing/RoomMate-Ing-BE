@@ -57,7 +57,7 @@ namespace BLL_Service.Service
             { 
                 var houseworkList = await _unitOfWork.HouseWorkRepository.FindAllAsync();
                 if (houseworkList.Count == 0) return new ResponseDTO<IEnumerable<HouseWorkDTO>>() { Success = false, StatusCode = 404, ErrorMessage = "Error: No Houseworks Found" };
-                var houseworkDtoList = houseworkList.HouseWorkListConvertion();
+                var houseworkDtoList = houseworkList.ToHouseWork();
                 return new ResponseDTO<IEnumerable<HouseWorkDTO>>() { Success = true, StatusCode = 200, Data = houseworkDtoList };
             }
             catch 
